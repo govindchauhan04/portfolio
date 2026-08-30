@@ -46,7 +46,7 @@ export const projects = [
       'Deployed as separate frontend and backend services on Render with CI/CD pipelines',
     ],
     github: 'https://github.com/geekygovind/NexShelf',
-    live: 'https://nexshop-flax.vercel.app',
+    live: 'https://nexshelf.onrender.com',
   },
   {
     title: 'AI Study Planner',
