@@ -1,10 +1,11 @@
 import os
-from fastapi import APIRouter
+import logging
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/chat", tags=["chat"])
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+logger = logging.getLogger(__name__)
 
 # Short knowledge base pulled straight from the portfolio data — keeps the
 # assistant's answers accurate and grounded, not hallucinated.
@@ -61,20 +62,22 @@ class ChatRequest(BaseModel):
 
 @router.post("")
 def chat(payload: ChatRequest):
-    if not GROQ_API_KEY:
-        return {"reply": "Hey! I'm Govind Singh. I specialize in Java, DSA, React, Node.js, FastAPI, and building full-stack AI applications!"}
+    api_key = os.getenv("GROQ_API_KEY", "").strip()
+    if not api_key:
+        raise HTTPException(status_code=503, detail="AI chat is not configured")
 
     try:
         from groq import Groq
 
-        client = Groq(api_key=GROQ_API_KEY)
+        client = Groq(api_key=api_key, timeout=15.0, max_retries=0)
         completion = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[{"role": "system", "content": SYSTEM_PROMPT}]
-            + [m.model_dump() for m in payload.messages][-10:],
+            + [{"role": m.role, "content": m.content} for m in payload.messages][-10:],
             max_tokens=250,
             temperature=0.6,
         )
         return {"reply": completion.choices[0].message.content.strip()}
-    except Exception as e:
-        return {"reply": "Hey! I'm Govind. I'm a B.Tech CSE student specializing in Java, Data Structures & Algorithms, React, and Full Stack AI Web Applications!"}
+    except Exception as exc:
+        logger.warning("AI provider request failed (%s)", type(exc).__name__)
+        raise HTTPException(status_code=503, detail="AI chat is temporarily unavailable") from exc

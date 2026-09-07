@@ -11,6 +11,7 @@ export default function GovindAI({ isOpen, onClose, onToggle }) {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [chatMode, setChatMode] = useState('ready');
   const endRef = useRef(null);
 
   useEffect(() => {
@@ -48,10 +49,13 @@ export default function GovindAI({ isOpen, onClose, onToggle }) {
     setInput('');
     setLoading(true);
 
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 20000);
     try {
-      const apiBase = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+      const apiBase = (import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:8000' : '')).trim().replace(/\/$/, '');
       const res = await fetch(`${apiBase}/api/chat`, {
         method: 'POST',
+        signal: controller.signal,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: newMsgList.map(({ role, content }) => ({ role, content }))
@@ -60,14 +64,15 @@ export default function GovindAI({ isOpen, onClose, onToggle }) {
 
       if (!res.ok) throw new Error('API unavailable');
       const data = await res.json();
-      setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
+      if (typeof data.reply !== 'string' || !data.reply.trim()) throw new Error('Empty AI reply');
+      setChatMode('online');
+      setMessages((prev) => [...prev, { role: 'assistant', content: data.reply.trim() }]);
     } catch (err) {
-      // Use local intelligent answer fallback
-      setTimeout(() => {
-        const reply = getGovindAnswer(text);
-        setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
-      }, 500);
+      setChatMode('fallback');
+      const reply = getGovindAnswer(text);
+      setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
     } finally {
+      clearTimeout(timeout);
       setLoading(false);
     }
   };
@@ -98,7 +103,7 @@ export default function GovindAI({ isOpen, onClose, onToggle }) {
                 </h4>
                 <span className="text-[10px] text-emerald-400 flex items-center space-x-1">
                   <FaCircle className="text-[6px] animate-pulse" />
-                  <span>ONLINE &bull; GROQ POWERED</span>
+                  <span>{chatMode === 'online' ? 'ONLINE | GROQ POWERED' : chatMode === 'fallback' ? 'BASIC PORTFOLIO ANSWERS' : 'ASK ABOUT GOVIND'}</span>
                 </span>
               </div>
             </div>
@@ -107,6 +112,12 @@ export default function GovindAI({ isOpen, onClose, onToggle }) {
               <FaTimes />
             </button>
           </div>
+
+          {chatMode === 'fallback' && (
+            <p role="status" className="px-4 py-2 text-amber-200 bg-slate-900">
+              AI is temporarily unavailable. I can still answer basic questions about Govind. Try sending another message to reconnect.
+            </p>
+          )}
 
           {/* Messages Body */}
           <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#05070A]/90">
