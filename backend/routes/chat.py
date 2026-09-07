@@ -71,7 +71,7 @@ def chat(payload: ChatRequest):
 
         client = Groq(api_key=api_key, timeout=15.0, max_retries=0)
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
             messages=[{"role": "system", "content": SYSTEM_PROMPT}]
             + [{"role": m.role, "content": m.content} for m in payload.messages][-10:],
             max_tokens=250,
