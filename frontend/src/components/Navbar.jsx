@@ -13,7 +13,6 @@ export default function Navbar({ onOpenTerminal, onOpenAI }) {
     { id: 'about', label: 'About' },
     { id: 'skills', label: 'Skills' },
     { id: 'projects', label: 'Projects' },
-    { id: 'notes', label: 'Notes' },
     { id: 'journey', label: 'Journey' },
     { id: 'education', label: 'Education' },
     { id: 'videos', label: 'Videos' },
