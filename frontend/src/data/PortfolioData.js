@@ -34,7 +34,7 @@ export const rotatingRoles = [
   "Full Stack Developer",
   "Problem Solver",
   "DSA Enthusiast",
-  "AI/ML Enginear",
+  "AI/ML Engineer",
 ];
 
 export const education = [
