@@ -1,90 +1,77 @@
-import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi'
-import { profile } from '../data/PortfolioData'
-
-const links = [
-  { label: 'Home', href: '#home' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Tech Stack', href: '#techstack' },
-  { label: 'Additional Skills', href: '#additionalskills' },
-  { label: 'Education', href: '#education' },
-  { label: 'Certificates', href: '#certificates' },
-  { label: 'Resume', href: '#resume' },
-  { label: 'Feedback', href: '#feedback' },
-]
+import React from 'react';
+import { profile } from '../data/PortfolioData';
+import { FaGithub, FaLinkedin, FaArrowUp } from 'react-icons/fa';
+import { SiLeetcode } from 'react-icons/si';
 
 export default function Footer() {
-  return (
-    <footer className="border-t border-white/10 bg-black/40 backdrop-blur-[2px]">
-      <div className="mx-auto w-full max-w-6xl px-6 py-10">
-        <div className="flex flex-row items-start justify-between gap-6 sm:gap-10">
-          {/* Left — brand + blurb + icons */}
-          <div className="max-w-[60%] sm:max-w-none">
-            <a
-              href="#home"
-              className="translate-y-[1px] font-display text-xl font-semibold leading-none text-ink"
-            >
-              <span style={{ color: '#22e5ff' }}>_.</span>GOVIND
-              <span style={{ color: '#22e5ff' }}>SINGH</span>
-            </a>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
-              Open to new opportunities, collaborations, and project-based work. Have a project to build or an opportunity to discuss? Feel free to reach out.
-            </p>
-            <div className="mt-5 flex gap-3">
-              {profile.github && (
-                <a
-                  href={profile.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-muted transition hover:text-blue-400"
-                >
-                  <FiGithub size={16} />
-                </a>
-              )}
-              {profile.linkedin && (
-                <a
-                  href={profile.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-muted transition hover:text-blue-400"
-                >
-                  <FiLinkedin size={16} />
-                </a>
-              )}
-              {profile.email && (
-                <a
-                  href={`mailto:${profile.email}`}
-                  className="text-muted transition hover:text-blue-400"
-                >
-                  <FiMail size={16} />
-                </a>
-              )}
-            </div>
-          </div>
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
-          {/* Right — Quick Links, same list as Navbar */}
-          <div className="shrink-0">
-            <h4 className="text-sm font-semibold text-ink">Quick Links</h4>
-            <ul className="mt-4 space-y-2.5">
-              {links.map((l) => (
-                <li key={l.href}>
-                  <a
-                    href={l.href}
-                    className="text-sm text-muted transition hover:text-blue-400"
-                  >
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+  return (
+    <footer className="py-20 relative overflow-hidden bg-[#05070A] border-t border-slate-800">
+      <div className="w-[92%] max-w-7xl mx-auto flex flex-col justify-between">
+        {/* Large Typography Callout */}
+        <div className="mb-16">
+          <h2 className="text-4xl sm:text-7xl lg:text-8xl font-extrabold font-heading text-slate-100 uppercase tracking-tight leading-[0.95]">
+            LET'S CREATE <br />
+            <span className="text-gradient-purple">SOMETHING</span> <br />
+            <span className="text-gradient-cyan">AWESOME.</span>
+          </h2>
         </div>
 
-        <div className="mt-10 border-t border-white/10 pt-5">
-          <p className="text-sm text-muted">
-            © {new Date().getFullYear()} {profile.name}. All rights reserved.
-          </p>
+        {/* Footer Bottom Bar */}
+        <div className="pt-8 border-t border-slate-800/80 flex flex-col md:flex-row items-center justify-between gap-6 font-mono text-xs text-slate-400">
+          <div className="space-y-1 text-center md:text-left">
+            <p className="text-slate-200 font-bold">
+              Designed &amp; Built by {profile.name}
+            </p>
+            <p className="text-slate-500">
+              Built with React + curiosity + ☕
+            </p>
+          </div>
+
+          {/* Social Links */}
+          <div className="flex items-center space-x-4">
+            <a
+              href={profile.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2.5 rounded-xl bg-slate-900 text-slate-300 hover:text-cyan-400 border border-slate-800 transition-colors"
+              title="GitHub"
+            >
+              <FaGithub className="text-base" />
+            </a>
+            <a
+              href={profile.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2.5 rounded-xl bg-slate-900 text-slate-300 hover:text-cyan-400 border border-slate-800 transition-colors"
+              title="LinkedIn"
+            >
+              <FaLinkedin className="text-base" />
+            </a>
+            <a
+              href={profile.leetcode}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2.5 rounded-xl bg-slate-900 text-slate-300 hover:text-amber-400 border border-slate-800 transition-colors"
+              title="LeetCode"
+            >
+              <SiLeetcode className="text-base" />
+            </a>
+          </div>
+
+          {/* Back to top */}
+          <button
+            onClick={scrollToTop}
+            className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-cyan-400 border border-slate-800 transition-colors cursor-pointer"
+          >
+            <span>Back to top</span>
+            <FaArrowUp className="text-xs" />
+          </button>
         </div>
       </div>
     </footer>
-  )
+  );
 }

@@ -1,158 +1,58 @@
-import { motion } from 'framer-motion'
-import { GraduationCap, FileText, BookOpen } from 'lucide-react'
-import { education } from '../data/PortfolioData'
-
-const icons = [GraduationCap, FileText, BookOpen]
+import React from 'react';
+import { education } from '../data/PortfolioData';
+import { FaGraduationCap, FaSchool, FaAward } from 'react-icons/fa';
 
 export default function Education() {
   return (
-    <section id="education" className="mx-auto max-w-[90rem] px-4 py-16 sm:px-8 sm:py-24">
-      <style>{`
-        @keyframes headingGlitch {
-          0%, 88%, 100% {
-            text-shadow: none;
-            clip-path: inset(0 0 0 0);
-          }
-          89% {
-            text-shadow: -4px 0 #ff2079, 4px 0 #22e5ff;
-            clip-path: inset(10% 0 60% 0);
-          }
-          90.5% {
-            text-shadow: 4px 0 #ff2079, -4px 0 #13e6a0;
-            clip-path: inset(55% 0 10% 0);
-          }
-          91.5% {
-            text-shadow: -3px 0 #22e5ff, 3px 0 #ff2079;
-            clip-path: inset(20% 0 40% 0);
-          }
-          92.5% {
-            text-shadow: none;
-            clip-path: inset(0 0 0 0);
-          }
-          95%, 96% {
-            text-shadow: 3px 0 #13e6a0, -3px 0 #ff2079;
-            clip-path: inset(40% 0 25% 0);
-          }
-          97% {
-            text-shadow: none;
-            clip-path: inset(0 0 0 0);
-          }
-        }
-        .heading-glitch {
-          display: inline-block;
-          animation: headingGlitch 2s steps(1) infinite;
-        }
+    <section id="education" className="py-24 relative overflow-hidden bg-[#07090D]">
+      <div className="w-[92%] max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center space-x-3 mb-4">
+          <span className="h-[1px] w-12 bg-cyan-400" />
+          <span className="font-mono text-xs text-cyan-400 uppercase tracking-widest">06.5 // ACADEMIC FOUNDATION</span>
+        </div>
 
-        .edu-rail {
-          background: linear-gradient(to bottom, #22e5ff 0%, #2362eb 35%, #13e6a0 100%);
-        }
-        .edu-node-ring {
-          animation: nodeSpin 16s linear infinite;
-        }
-        @keyframes nodeSpin {
-          to { transform: rotate(360deg); }
-        }
-        .edu-dots-bg {
-          background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
-          background-size: 18px 18px;
-          background-position: -4px -4px;
-        }
+        <h2 className="text-3xl sm:text-5xl font-extrabold font-heading text-slate-100 uppercase tracking-tight mb-16">
+          ACADEMIC <span className="text-gradient-cyan">EDUCATION</span>
+        </h2>
 
-        /* ---- responsive timeline offsets ---- */
-        .edu-rail {
-          left: 19px;
-        }
-        .edu-node {
-          height: 3rem;
-          width: 3rem;
-        }
-        .edu-item {
-          padding-left: 76px;
-        }
+        {/* Education Rail & Cards */}
+        <div className="relative border-l-2 border-cyan-500/30 ml-4 sm:ml-8 space-y-12 pl-6 sm:pl-10">
+          <div className="absolute top-0 bottom-0 -left-[2px] w-[2px] bg-gradient-to-b from-cyan-400 to-transparent shadow-[0_0_10px_#00e5ff]" />
 
-        @media (min-width: 640px) {
-          .edu-rail { left: 27px; }
-          .edu-node { height: 3.5rem; width: 3.5rem; }
-          .edu-item { padding-left: 104px; }
-        }
-      `}</style>
+          {education.map((item, idx) => (
+            <div key={idx} className="relative group">
+              {/* Glowing Icon Node */}
+              <div className="absolute -left-[31px] sm:-left-[47px] top-1.5 w-10 h-10 rounded-full bg-[#07090D] border-2 border-cyan-400 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(0,229,255,0.4)] group-hover:scale-110 group-hover:bg-cyan-950 transition-all duration-300">
+                {idx === 0 ? <FaGraduationCap className="text-base" /> : <FaSchool className="text-sm" />}
+              </div>
 
-      <h2 className="heading-glitch mb-10 font-display text-3xl font-semibold text-white sm:mb-16 sm:text-4xl md:text-5xl">
-        Education
-      </h2>
-
-      <div className="relative mx-auto max-w-4xl">
-        {/* timeline rail */}
-        <div
-          className="edu-rail absolute top-2 bottom-2 w-[2px] rounded-full"
-          style={{ boxShadow: '0 0 10px rgba(34,229,255,0.4)' }}
-        />
-
-        <div className="flex flex-col gap-10 sm:gap-14">
-          {education.map((e, i) => {
-            const Icon = icons[i % icons.length]
-            const accent = '#22e5ff'
-
-            return (
-              <motion.div
-                key={e.degree}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.5 }}
-                transition={{ duration: 0.6, ease: 'easeOut' }}
-                className="edu-item relative"
-              >
-                {/* node */}
-                <div className="edu-node absolute left-0 top-0 flex items-center justify-center">
-                  <span
-                    className="edu-node-ring absolute inset-0 rounded-full border border-dashed"
-                    style={{ borderColor: accent, opacity: 0.5 }}
-                  />
-                  <span
-                    className="absolute inset-2 rounded-full"
-                    style={{
-                      background: 'rgba(255,255,255,0.03)',
-                      boxShadow: `0 0 0 1px ${accent}55, 0 0 18px ${accent}66`,
-                    }}
-                  />
-                  <Icon size={18} style={{ color: accent, position: 'relative' }} className="sm:hidden" />
-                  <Icon size={20} style={{ color: accent, position: 'relative' }} className="hidden sm:block" />
+              {/* Glass Card */}
+              <div className="glass-card p-6 sm:p-8 border border-slate-800 hover:border-cyan-500/40 transition-all duration-300">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-3 font-mono">
+                  <span className="text-xs text-cyan-400 font-bold px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/30">
+                    {item.period}
+                  </span>
+                  {item.note && (
+                    <span className="text-xs text-emerald-400 font-bold px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/30 flex items-center space-x-1">
+                      <FaAward />
+                      <span>{item.note}</span>
+                    </span>
+                  )}
                 </div>
 
-                {/* card */}
-                <motion.div
-                  whileHover={{
-                    y: -6,
-                    boxShadow: `0 0 28px ${accent}59, 0 0 55px ${accent}26`,
-                  }}
-                  transition={{ duration: 0.4, ease: 'easeOut' }}
-                  className="relative rounded-2xl"
-                >
-                  <div
-                    className="edu-card edu-dots-bg relative overflow-hidden rounded-2xl border p-4 sm:p-6"
-                    style={{
-                      background: 'rgba(4,10,16,0.75)',
-                      borderColor: `${accent}40`,
-                      backdropFilter: 'blur(10px)',
-                    }}
-                  >
-                    <span className="text-xs font-bold sm:text-sm" style={{ color: '#3b82f6' }}>
-                      {e.period}
-                    </span>
-                    <h3 className="mt-2 mb-2 text-lg font-bold text-white sm:text-2xl">{e.degree}</h3>
-                    <h4 className="mb-3 text-sm text-white/50 sm:text-base">{e.school}</h4>
-                    {e.note && (
-                      <p className="text-sm font-bold sm:text-base" style={{ color: '#34D399' }}>
-                        {e.note}
-                      </p>
-                    )}
-                  </div>
-                </motion.div>
-              </motion.div>
-            )
-          })}
+                <h3 className="text-xl sm:text-2xl font-bold font-heading text-slate-100 mb-2">
+                  {item.degree}
+                </h3>
+
+                <h4 className="text-sm font-sans text-slate-400 font-medium">
+                  {item.school}
+                </h4>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
-  )
+  );
 }

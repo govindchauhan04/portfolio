@@ -1,226 +1,186 @@
-import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { FiMenu, FiX } from 'react-icons/fi'
+import React, { useState, useEffect } from 'react';
+import { FaTerminal, FaMoon, FaSun, FaBars, FaTimes, FaRobot } from 'react-icons/fa';
 
-const links = [
-  { label: 'Home', href: '#home' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Tech Stack', href: '#techstack' },
-  { label: 'Additional Skills', href: '#additionalskills' },
-  { label: 'Videos', href: '#videos' },
-  { label: 'Education', href: '#education' },
-  { label: 'Certificates', href: '#certificates' },
-  { label: 'Resume', href: '#resume' },
-  { label: 'Feedback', href: '#feedback' },
-  { label: 'Notes', href: '#learning-notes' },
-  { label: 'DSA Lab', href: '#dsa-lab' },
-]
+export default function Navbar({ onOpenTerminal, onOpenAI }) {
+  const [activeSection, setActiveSection] = useState('home');
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [theme, setTheme] = useState('cyber-dark');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
-  const [active, setActive] = useState('#home')
-  const [menuOpen, setMenuOpen] = useState(false)
+  const navItems = [
+    { id: 'home', label: 'Home' },
+    { id: 'about', label: 'About' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'notes', label: 'Notes' },
+    { id: 'journey', label: 'Journey' },
+    { id: 'education', label: 'Education' },
+    { id: 'videos', label: 'Videos' },
+    { id: 'achievements', label: 'Achievements' },
+    { id: 'contact', label: 'Contact' }
+  ];
 
+  // Active section observer & hide-on-scroll down
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12)
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
 
-  // scroll-spy: watch each section, mark whichever is most in view as active
-  useEffect(() => {
-    const sections = links
-      .map((l) => document.querySelector(l.href))
-      .filter(Boolean)
-
-    if (sections.length === 0) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
-
-        if (visible.length > 0) {
-          setActive(`#${visible[0].target.id}`)
-        }
-      },
-      {
-        rootMargin: '-40% 0px -50% 0px',
-        threshold: [0, 0.25, 0.5, 0.75, 1],
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false); // Hide on scroll down
+      } else {
+        setIsVisible(true); // Show on scroll up
       }
-    )
+      setLastScrollY(currentScrollY);
+    };
 
-    sections.forEach((s) => observer.observe(s))
-    return () => observer.disconnect()
-  }, [])
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
-  // lock background scroll while the mobile menu is open
+  // IntersectionObserver for active section link highlighting
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : ''
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [menuOpen])
+    const observerOptions = {
+      root: null,
+      rootMargin: '-30% 0px -40% 0px',
+      threshold: 0
+    };
 
-  // close the mobile menu automatically if the viewport grows into desktop size
-  useEffect(() => {
-    const onResize = () => {
-      if (window.innerWidth >= 768) setMenuOpen(false)
-    }
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [])
+    const handleIntersect = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
 
-  const handleLinkClick = () => setMenuOpen(false)
+    const observer = new IntersectionObserver(handleIntersect, observerOptions);
+
+    navItems.forEach((item) => {
+      const el = document.getElementById(item.id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'cyber-dark' ? 'cyber-contrast' : 'cyber-dark';
+    setTheme(nextTheme);
+    if (nextTheme === 'cyber-contrast') {
+      document.documentElement.setAttribute('data-theme', 'cyber-contrast');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  };
+
+  const scrollTo = (id) => {
+    setMobileMenuOpen(false);
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
-    <motion.header
-      initial={{ opacity: 0, y: -16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.9, ease: 'easeOut' }}
-      className="fixed top-0 z-50 w-full px-4 pt-4 sm:px-6 md:px-8"
+    <header
+      className={`fixed top-4 left-1/2 -translate-x-1/2 w-[94%] max-w-7xl z-50 transition-all duration-300 ${
+        isVisible ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0 pointer-events-none'
+      }`}
     >
-      <nav
-        className={`mx-auto flex max-w-6xl items-center justify-between rounded-2xl border px-4 py-3 backdrop-blur-md transition-all duration-300 sm:px-6 sm:py-3.5 ${
-          scrolled
-            ? 'border-cyan-300/25 bg-black/50 shadow-[0_8px_34px_rgba(34,229,255,0.18)]'
-            : 'border-cyan-300/10 bg-black/20'
-        }`}
-      >
-        <a
-          href="#home"
-          onClick={handleLinkClick}
-          className="translate-y-[1px] font-display text-lg font-semibold leading-none text-white sm:text-xl"
-        >
-          <span style={{ color: '#22e5ff' }}>_.</span>GOVIND
-          <span style={{ color: '#22e5ff' }}>SINGH</span>
-        </a>
-
-        {/* ================= DESKTOP LINKS ================= */}
-
-        <motion.div
-          className="hidden items-center gap-3 lg:gap-5 md:flex"
-          initial="hidden"
-          animate="show"
-          variants={{
-            hidden: {},
-            show: { transition: { staggerChildren: 0.08, delayChildren: 0.2 } },
-          }}
-        >
-          {links.map((l) => {
-            const isActive = active === l.href
-            return (
-              <motion.a
-                key={l.href}
-                href={l.href}
-                variants={{
-                  hidden: { opacity: 0 },
-                  show: { opacity: 1, transition: { duration: 0.6, ease: 'easeOut' } },
-                }}
-                className="group relative block overflow-hidden text-xs leading-none lg:text-sm"
-                style={{ height: '1.2em', lineHeight: '1.2em' }}
-              >
-                <span
-                  className={`block transition-transform duration-400 ease-out group-hover:-translate-y-full ${
-                    isActive ? 'text-cyan-300' : 'text-white/65'
-                  }`}
-                  style={
-                    isActive
-                      ? { textShadow: '0 0 10px rgba(34,229,255,0.7)' }
-                      : undefined
-                  }
-                >
-                  {l.label}
-                </span>
-                <span
-                  className="absolute left-0 top-0 block translate-y-full text-cyan-300 transition-transform duration-400 ease-out group-hover:translate-y-0"
-                  style={{ textShadow: '0 0 10px rgba(34,229,255,0.7)' }}
-                >
-                  {l.label}
-                </span>
-                {isActive && (
-                  <motion.span
-                    layoutId="navActiveDot"
-                    className="absolute -bottom-2 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-cyan-300"
-                    style={{ boxShadow: '0 0 10px rgba(34,229,255,0.9)' }}
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                  />
-                )}
-              </motion.a>
-            )
-          })}
-        </motion.div>
-
-        {/* ================= HAMBURGER (mobile/tablet) ================= */}
-
+      <nav className="glass-panel rounded-2xl px-4 py-3 flex items-center justify-between shadow-2xl border border-cyan-500/20">
+        {/* Logo */}
         <button
-          type="button"
-          onClick={() => setMenuOpen((o) => !o)}
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={menuOpen}
-          className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white transition-colors duration-300 hover:border-cyan-300/40 hover:text-cyan-300 md:hidden"
+          onClick={() => scrollTo('home')}
+          className="flex items-center space-x-2 font-mono text-lg font-bold text-slate-100 hover:text-cyan-400 transition-colors group cursor-pointer"
         >
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.span
-              key={menuOpen ? 'close' : 'open'}
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.18 }}
-              className="flex items-center justify-center"
-            >
-              {menuOpen ? <FiX size={20} /> : <FiMenu size={20} />}
-            </motion.span>
-          </AnimatePresence>
+          <span className="text-cyan-400 group-hover:scale-110 transition-transform">&lt;</span>
+          <span className="bg-gradient-to-r from-cyan-400 to-violet-400 bg-clip-text text-transparent">GS</span>
+          <span className="text-cyan-400 group-hover:scale-110 transition-transform">/&gt;</span>
         </button>
+
+        {/* Desktop Navigation Links */}
+        <div className="hidden lg:flex items-center space-x-1 font-sans text-xs font-medium">
+          {navItems.map((item) => {
+            const isActive = activeSection === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => scrollTo(item.id)}
+                className={`relative px-3 py-1.5 rounded-lg transition-all duration-200 cursor-pointer ${
+                  isActive
+                    ? 'text-cyan-400 font-semibold'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                }`}
+              >
+                {item.label}
+                {isActive && (
+                  <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-gradient-to-r from-cyan-400 to-violet-500 rounded-full shadow-[0_0_8px_#00e5ff]" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Right Actions: Govind AI Launcher, Terminal Toggle, Theme Switch, Mobile Hamburger */}
+        <div className="flex items-center space-x-2.5">
+          {/* AI Assistant Chat Launcher */}
+          <button
+            onClick={onOpenAI}
+            title="Ask Govind AI Assistant"
+            className="flex items-center space-x-1.5 text-xs font-mono px-3 py-1.5 rounded-lg bg-gradient-to-r from-cyan-500/20 to-violet-500/20 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/30 transition-all shadow-[0_0_12px_rgba(0,229,255,0.2)] cursor-pointer"
+          >
+            <FaRobot className="text-cyan-400 text-sm animate-pulse" />
+            <span className="hidden sm:inline font-bold">Govind.AI</span>
+          </button>
+
+          {/* Terminal Launcher */}
+          <button
+            onClick={onOpenTerminal}
+            title="Open Interactive Terminal (> _)"
+            className="flex items-center space-x-1.5 text-xs font-mono px-2.5 py-1.5 rounded-lg bg-slate-900/80 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-400 transition-all cursor-pointer"
+          >
+            <FaTerminal className="text-xs" />
+            <span className="hidden sm:inline">&gt; _</span>
+          </button>
+
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            title="Toggle Visual Mode"
+            className="p-2 rounded-lg text-slate-400 hover:text-cyan-400 hover:bg-slate-800/60 transition-colors cursor-pointer"
+          >
+            {theme === 'cyber-dark' ? <FaSun className="text-amber-400" /> : <FaMoon className="text-cyan-400" />}
+          </button>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 rounded-lg text-slate-300 hover:text-cyan-400 hover:bg-slate-800/60 cursor-pointer"
+          >
+            {mobileMenuOpen ? <FaTimes className="text-xl" /> : <FaBars className="text-xl" />}
+          </button>
+        </div>
       </nav>
 
-      {/* ================= MOBILE DROPDOWN PANEL ================= */}
-
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -12, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -12, scale: 0.98 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="mx-auto mt-2 max-w-6xl overflow-hidden rounded-2xl border border-cyan-300/20 bg-black/80 shadow-[0_16px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl md:hidden"
-          >
-            <div className="flex flex-col divide-y divide-white/10">
-              {links.map((l, i) => {
-                const isActive = active === l.href
-                return (
-                  <motion.a
-                    key={l.href}
-                    href={l.href}
-                    onClick={handleLinkClick}
-                    initial={{ opacity: 0, x: -12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: i * 0.045, ease: 'easeOut' }}
-                    className={`flex items-center justify-between px-5 py-4 text-base transition-colors duration-200 ${
-                      isActive ? 'text-cyan-300' : 'text-white/75 hover:text-cyan-300'
-                    }`}
-                    style={
-                      isActive
-                        ? { textShadow: '0 0 10px rgba(34,229,255,0.6)' }
-                        : undefined
-                    }
-                  >
-                    {l.label}
-                    {isActive && (
-                      <span
-                        className="h-1.5 w-1.5 rounded-full bg-cyan-300"
-                        style={{ boxShadow: '0 0 10px rgba(34,229,255,0.9)' }}
-                      />
-                    )}
-                  </motion.a>
-                )
-              })}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.header>
-  )
+      {/* Mobile Nav Drawer */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden mt-2 glass-panel rounded-2xl p-4 border border-cyan-500/30 flex flex-col space-y-1.5 font-mono text-xs animate-fadeIn max-h-[70vh] overflow-y-auto">
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => scrollTo(item.id)}
+              className={`text-left px-3.5 py-2 rounded-lg transition-colors ${
+                activeSection === item.id
+                  ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 font-bold'
+                  : 'text-slate-300 hover:bg-slate-800/40'
+              }`}
+            >
+              &gt; {item.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </header>
+  );
 }

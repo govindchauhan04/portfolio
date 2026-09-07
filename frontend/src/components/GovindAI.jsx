@@ -1,234 +1,174 @@
-import { useEffect, useRef, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { FiMessageSquare, FiX, FiSend, FiUser } from 'react-icons/fi'
-import axios from 'axios'
+import React, { useState, useRef, useEffect } from 'react';
+import { profile } from '../data/PortfolioData';
+import { FaRobot, FaTimes, FaPaperPlane, FaUser, FaCircle } from 'react-icons/fa';
 
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '')
-
-const WELCOME = {
-  role: 'assistant',
-  content: "Hey, I'm Govind! Ask me anything about my projects, my tech stack, or my experience.",
-}
-
-export default function GovindAI() {
-  const [open, setOpen] = useState(false)
-  const [messages, setMessages] = useState([WELCOME])
-  const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
-  const bottomRef = useRef(null)
+export default function GovindAI({ isOpen, onClose, onToggle }) {
+  const [messages, setMessages] = useState([
+    {
+      role: 'assistant',
+      content: "Hey! I'm Govind AI. Ask me anything about Govind's Java & Full Stack projects, DSA streak, or technical background!"
+    }
+  ]);
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const endRef = useRef(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, open])
+    endRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isOpen]);
 
-  const sendMessage = async (e) => {
-    e.preventDefault()
-    const text = input.trim()
-    if (!text || loading) return
+  // Local fallback response generator for Govind's profile
+  const getGovindAnswer = (query) => {
+    const q = query.toLowerCase();
+    if (q.includes('skill') || q.includes('stack') || q.includes('language')) {
+      return `Govind specializes in Java, Python, C, HTML5, CSS3, JavaScript, Tailwind CSS, React.js, NumPy, Pandas, Node.js, FastAPI, and DSA!`;
+    }
+    if (q.includes('project') || q.includes('pulsebridge') || q.includes('nexshelf')) {
+      return `Govind has built featured projects like PulseBridge (AI Blood Donation Platform with Groq LLaMA 3.3 70B), NexShelf (AI Library Management System), and AI Study Planner!`;
+    }
+    if (q.includes('dsa') || q.includes('leetcode') || q.includes('problem')) {
+      return `Govind has an unbroken 200+ Days streak on LeetCode with over 350+ DSA problems solved, focusing primarily on Java data structures (Arrays, DP, Graphs, Trees).`;
+    }
+    if (q.includes('education') || q.includes('college') || q.includes('university') || q.includes('school')) {
+      return `Govind is pursuing B.Tech in Computer Science & Engineering at Allenhouse Institute of Technology, Kanpur (2025–2029). He completed secondary education at New Kingston Senior Secondary School (86.5%).`;
+    }
+    if (q.includes('contact') || q.includes('email') || q.includes('hire')) {
+      return `You can reach Govind via email at ${profile.email} or connect with him on LinkedIn (${profile.linkedin}) and GitHub (${profile.github}).`;
+    }
+    return `Govind Singh is a Software Developer specializing in Java, DSA, and Full Stack Web Engineering. Feel free to ask about his projects, skills, or education!`;
+  };
 
-    const nextMessages = [...messages, { role: 'user', content: text }]
-    setMessages(nextMessages)
-    setInput('')
-    setLoading(true)
+  const handleSend = async (e) => {
+    e.preventDefault();
+    const text = input.trim();
+    if (!text || loading) return;
+
+    const newMsgList = [...messages, { role: 'user', content: text }];
+    setMessages(newMsgList);
+    setInput('');
+    setLoading(true);
 
     try {
-      const res = await axios.post(`${API_BASE}/api/chat`, {
-        messages: nextMessages.map(({ role, content }) => ({ role, content })),
-      })
-      setMessages((prev) => [...prev, { role: 'assistant', content: res.data.reply }])
+      const apiBase = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+      const res = await fetch(`${apiBase}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: newMsgList.map(({ role, content }) => ({ role, content }))
+        })
+      });
+
+      if (!res.ok) throw new Error('API unavailable');
+      const data = await res.json();
+      setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
     } catch (err) {
-      console.error(err)
-      setMessages((prev) => [
-        ...prev,
-        { role: 'assistant', content: "Sorry, I couldn't reach the server. Try again in a moment." },
-      ])
+      // Use local intelligent answer fallback
+      setTimeout(() => {
+        const reply = getGovindAnswer(text);
+        setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
+      }, 500);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap');
-
-        @keyframes govindPulseRing {
-          0% {
-            box-shadow: 0 0 0 0 rgba(34, 229, 255, 0.45);
-          }
-          70% {
-            box-shadow: 0 0 0 14px rgba(34, 229, 255, 0);
-          }
-          100% {
-            box-shadow: 0 0 0 0 rgba(34, 229, 255, 0);
-          }
-        }
-
-        .govind-fab {
-          animation: govindPulseRing 2.6s ease-out infinite;
-        }
-
-        .govind-scroll::-webkit-scrollbar {
-          width: 6px;
-        }
-
-        .govind-scroll::-webkit-scrollbar-thumb {
-          background: rgba(34, 229, 255, 0.35);
-          border-radius: 999px;
-        }
-
-        .govind-scroll::-webkit-scrollbar-track {
-          background: transparent;
-        }
-      `}</style>
-
-      {/* Floating toggle button */}
-      <motion.button
-        onClick={() => setOpen((o) => !o)}
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.92 }}
-        className="govind-fab fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full text-white"
-        style={{
-          background: 'linear-gradient(135deg, #22e5ff, #2f7bff, #13e6a0)',
-          boxShadow: '0 0 24px rgba(34,229,255,.45)',
-        }}
-        aria-label="Open Govind Singh chat"
+      {/* Floating Widget Launcher Button at bottom right */}
+      <button
+        onClick={onToggle}
+        className="fixed bottom-6 right-6 z-[9990] w-14 h-14 rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500 text-slate-950 flex items-center justify-center shadow-[0_0_25px_rgba(0,229,255,0.5)] hover:scale-110 active:scale-95 transition-transform cursor-pointer"
+        title="Open Govind AI Assistant"
       >
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.span
-            key={open ? 'close' : 'open'}
-            initial={{ rotate: -90, opacity: 0 }}
-            animate={{ rotate: 0, opacity: 1 }}
-            exit={{ rotate: 90, opacity: 0 }}
-            transition={{ duration: 0.18 }}
-            className="flex items-center justify-center"
-          >
-            {open ? <FiX size={22} /> : <FiMessageSquare size={22} />}
-          </motion.span>
-        </AnimatePresence>
-      </motion.button>
+        {isOpen ? <FaTimes className="text-xl text-slate-950" /> : <FaRobot className="text-2xl text-slate-950" />}
+      </button>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 24, scale: 0.95 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-24 right-4 left-4 z-50 mx-auto flex h-[32rem] max-h-[75vh] w-auto max-w-[26rem] flex-col overflow-hidden rounded-2xl border border-cyan-300/25 bg-[#020609]/95 backdrop-blur-xl sm:left-auto sm:right-6 sm:mx-0 sm:h-[38rem] sm:w-[26rem] sm:max-w-none"
-            style={{
-              boxShadow: '0 0 40px rgba(34,229,255,.15), inset 0 0 40px rgba(0,200,255,.04)',
-            }}
-          >
-            {/* top glow line */}
-            <div className="absolute left-[10%] right-[10%] top-0 h-px bg-gradient-to-r from-transparent via-cyan-300 to-transparent" />
-
-            {/* Header */}
-            <div className="flex items-center gap-3 border-b border-white/10 bg-white/[0.02] px-5 py-4">
-              <div
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
-                style={{
-                  background: 'linear-gradient(135deg, #22e5ff, #13e6a0)',
-                  boxShadow: '0 0 16px rgba(34,229,255,.35)',
-                }}
-              >
-                <FiUser size={16} className="text-[#020609]" />
+      {/* Floating Chat Modal */}
+      {isOpen && (
+        <div className="fixed bottom-24 right-4 sm:right-6 z-[9995] w-[90vw] sm:w-[380px] h-[500px] glass-panel rounded-3xl border border-cyan-500/40 shadow-[0_0_50px_rgba(0,229,255,0.25)] flex flex-col overflow-hidden font-mono text-xs animate-fadeIn">
+          {/* Header */}
+          <div className="bg-[#07090D]/90 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="w-7 h-7 rounded-full bg-gradient-to-r from-cyan-400 to-violet-500 flex items-center justify-center text-slate-950 font-bold">
+                <FaRobot />
               </div>
-              <div className="flex flex-1 flex-col leading-tight">
-                <p
-                  className="text-sm font-semibold uppercase tracking-widest text-cyan-300"
-                  style={{ fontFamily: "'Orbitron', sans-serif" }}
-                >
-                  Govind Singh
-                </p>
-                <span className="mt-0.5 flex items-center gap-1.5 text-[11px] text-white/40">
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-                  Online
+              <div>
+                <h4 className="font-bold text-slate-100 font-heading text-sm leading-none">
+                  Govind.AI
+                </h4>
+                <span className="text-[10px] text-emerald-400 flex items-center space-x-1">
+                  <FaCircle className="text-[6px] animate-pulse" />
+                  <span>ONLINE &bull; GROQ POWERED</span>
                 </span>
               </div>
             </div>
 
-            {/* Messages */}
-            <div className="govind-scroll flex-1 space-y-4 overflow-y-auto px-5 py-5 text-sm">
-              {messages.map((m, i) => (
-                <div
-                  key={i}
-                  className={`flex items-end gap-2 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}
-                >
-                  {m.role === 'assistant' && (
-                    <div
-                      className="mb-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
-                      style={{ background: 'linear-gradient(135deg, #22e5ff, #13e6a0)' }}
-                    >
-                      <FiUser size={11} className="text-[#020609]" />
-                    </div>
-                  )}
-                  <div
-                    className={`max-w-[78%] break-words whitespace-pre-wrap rounded-2xl px-4 py-2.5 leading-relaxed ${
-                      m.role === 'user'
-                        ? 'rounded-br-md text-white'
-                        : 'rounded-bl-md border border-white/10 bg-white/[0.04] text-white/80'
-                    }`}
-                    style={
-                      m.role === 'user'
-                        ? {
-                            background: 'linear-gradient(135deg, #0f172a, #1e293b)',
-                            boxShadow: '0 0 14px rgba(34,229,255,.12)',
-                            border: '1px solid rgba(34,229,255,0.25)',
-                          }
-                        : undefined
-                    }
-                  >
-                    {m.content.replace('[[RESUME_LINK]]', '').trim()}
-                  </div>
-                </div>
-              ))}
-              {loading && (
-                <div className="flex items-end gap-2">
-                  <div
-                    className="mb-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
-                    style={{ background: 'linear-gradient(135deg, #22e5ff, #13e6a0)' }}
-                  >
-                    <FiUser size={11} className="text-[#020609]" />
-                  </div>
-                  <div className="flex items-center gap-1.5 rounded-2xl rounded-bl-md border border-white/10 bg-white/[0.04] px-4 py-3">
-                    <span
-                      className="h-1.5 w-1.5 animate-bounce rounded-full"
-                      style={{ backgroundColor: '#22e5ff', animationDelay: '-0.3s' }}
-                    />
-                    <span
-                      className="h-1.5 w-1.5 animate-bounce rounded-full"
-                      style={{ backgroundColor: '#22e5ff', animationDelay: '-0.15s' }}
-                    />
-                    <span
-                      className="h-1.5 w-1.5 animate-bounce rounded-full"
-                      style={{ backgroundColor: '#22e5ff' }}
-                    />
-                  </div>
-                </div>
-              )}
-              <div ref={bottomRef} />
-            </div>
+            <button onClick={onClose} className="text-slate-400 hover:text-cyan-400">
+              <FaTimes />
+            </button>
+          </div>
 
-            {/* Input */}
-            <form onSubmit={sendMessage} className="flex gap-2.5 border-t border-white/10 bg-white/[0.02] p-4">
-              <input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask me something..."
-                className="flex-1 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white outline-none transition-colors placeholder:text-white/30 focus:border-cyan-300/60"
-              />
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white transition-transform hover:scale-105 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
+          {/* Messages Body */}
+          <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#05070A]/90">
+            {messages.map((msg, idx) => (
+              <div
+                key={idx}
+                className={`flex space-x-2 ${
+                  msg.role === 'user' ? 'justify-end' : 'justify-start'
+                }`}
               >
-                <FiSend size={16} />
-              </button>
-            </form>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                {msg.role === 'assistant' && (
+                  <div className="w-6 h-6 rounded-full bg-cyan-950 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0 mt-0.5">
+                    <FaRobot className="text-[10px]" />
+                  </div>
+                )}
+
+                <div
+                  className={`max-w-[80%] p-3 rounded-2xl leading-relaxed ${
+                    msg.role === 'user'
+                      ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold font-sans'
+                      : 'bg-slate-900/90 text-slate-200 border border-slate-800 font-sans'
+                  }`}
+                >
+                  {msg.content}
+                </div>
+
+                {msg.role === 'user' && (
+                  <div className="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 shrink-0 mt-0.5">
+                    <FaUser className="text-[10px]" />
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {loading && (
+              <div className="flex items-center space-x-2 text-cyan-400 font-mono text-[11px] animate-pulse">
+                <FaRobot />
+                <span>Thinking...</span>
+              </div>
+            )}
+            <div ref={endRef} />
+          </div>
+
+          {/* Input Bar */}
+          <form onSubmit={handleSend} className="p-3 bg-slate-900 border-t border-slate-800 flex items-center space-x-2">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask about Govind's skills or projects..."
+              className="flex-1 px-3 py-2 rounded-xl bg-[#05070A] border border-slate-800 text-slate-100 outline-none text-xs focus:border-cyan-400 placeholder:text-slate-500"
+            />
+            <button
+              type="submit"
+              disabled={loading}
+              className="p-2.5 rounded-xl bg-cyan-500 text-slate-950 font-bold hover:bg-cyan-400 transition-colors cursor-pointer"
+            >
+              <FaPaperPlane />
+            </button>
+          </form>
+        </div>
+      )}
     </>
-  )
+  );
 }

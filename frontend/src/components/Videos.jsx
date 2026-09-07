@@ -1,32 +1,61 @@
-import { motion } from 'framer-motion'
-import { Clapperboard, Play } from 'lucide-react'
-import { videos } from '../data/PortfolioData'
+import React from 'react';
+import { videos } from '../data/PortfolioData';
+import { FaPlay, FaVideo } from 'react-icons/fa';
 
 export default function Videos() {
   return (
-    <section id="videos" className="relative scroll-mt-28 px-4 py-24 sm:px-6 md:px-8">
-      <div className="mx-auto max-w-6xl">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-10 sm:mb-12">
-          <h2 className="flex items-center gap-3 font-display text-3xl font-semibold text-white sm:text-4xl"><Clapperboard className="text-cyan-300" size={32} /><span className="font-mono text-cyan-300">&gt;</span> MEDIA_LOGS</h2>
-          <div className="mt-4 h-1 w-20 bg-cyan-300" />
-        </motion.div>
+    <section id="videos" className="py-24 relative overflow-hidden bg-[#07090D]">
+      <div className="w-[92%] max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center space-x-3 mb-4">
+          <span className="h-[1px] w-12 bg-cyan-400" />
+          <span className="font-mono text-xs text-cyan-400 uppercase tracking-widest">07.5 // MEDIA LOGS</span>
+        </div>
 
-        {videos.length > 0 ? (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {videos.map((video, index) => (
-              <motion.article key={video.videoId} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} className="group overflow-hidden rounded-xl border border-white/10 bg-black/50 transition-colors duration-300 hover:border-cyan-300/60">
-                <div className="relative aspect-video w-full overflow-hidden">
-                  <iframe title={video.title} src={`https://www.youtube-nocookie.com/embed/${video.videoId}`} className="absolute inset-0 h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
-                  <div className="pointer-events-none absolute inset-0 border border-cyan-300/20 transition-colors group-hover:border-cyan-300/50" />
-                </div>
-                <div className="relative p-5"><Play size={16} className="absolute right-4 top-4 text-cyan-300/60" /><h3 className="truncate pr-7 font-display text-xl text-white transition-colors group-hover:text-cyan-200">{video.title}</h3><p className="mt-2 line-clamp-2 font-mono text-sm leading-6 text-white/50">{video.description}</p></div>
-              </motion.article>
-            ))}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+          <div>
+            <h2 className="text-3xl sm:text-5xl font-extrabold font-heading text-slate-100 uppercase tracking-tight flex items-center space-x-3">
+              <span>MEDIA</span> <span className="text-gradient-cyan">LOGS</span>
+              <FaVideo className="text-cyan-400 text-3xl ml-2" />
+            </h2>
+            <p className="text-slate-400 text-sm font-sans mt-2">
+              Curated high-value video resources for Data Science, Machine Learning, Python, and Neural Networks.
+            </p>
           </div>
-        ) : (
-          <div className="rounded-2xl border border-dashed border-cyan-300/25 bg-panel/60 p-8 text-center"><Clapperboard className="mx-auto text-cyan-300" size={30} /><p className="mt-3 font-medium text-white">Media logs are coming soon.</p><p className="mt-1 text-sm text-white/55">Add YouTube video IDs in PortfolioData.js to publish videos here.</p></div>
-        )}
+        </div>
+
+        {/* Video Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {videos.map((vid) => (
+            <div
+              key={vid.videoId}
+              className="glass-card rounded-2xl overflow-hidden border border-slate-800 hover:border-cyan-500/40 transition-all flex flex-col justify-between group"
+            >
+              {/* YouTube Embed Container */}
+              <div className="relative aspect-video w-full overflow-hidden bg-black">
+                <iframe
+                  title={vid.title}
+                  src={`https://www.youtube-nocookie.com/embed/${vid.videoId}`}
+                  className="w-full h-full border-none"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  loading="lazy"
+                />
+              </div>
+
+              {/* Title & Description */}
+              <div className="p-4 space-y-2">
+                <h3 className="font-heading font-bold text-slate-200 text-sm group-hover:text-cyan-300 transition-colors line-clamp-2">
+                  {vid.title}
+                </h3>
+                <p className="text-xs text-slate-400 font-sans leading-relaxed line-clamp-2">
+                  {vid.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
-  )
+  );
 }

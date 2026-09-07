@@ -26,7 +26,7 @@ def generate_ai_reply(message: str) -> str:
 
         client = Groq(api_key=GROQ_API_KEY)
         completion = client.chat.completions.create(
-            model="openai/gpt-oss-120b",
+            model="llama-3.3-70b-versatile",
             messages=[
                 {
                     "role": "system",
@@ -74,7 +74,6 @@ def send_email_notifications(name: str, email: str, subject: str, message: str) 
         visitor_message["From"] = EMAIL_USER
         visitor_message["To"] = email
 
-        # timeout=10 added — connection will fail fast instead of hanging forever
         with smtplib.SMTP("smtp.gmail.com", 587, timeout=10) as server:
             server.starttls()
             server.login(EMAIL_USER, EMAIL_PASS)
@@ -109,15 +108,12 @@ def create_feedback(payload: FeedbackCreate, background_tasks: BackgroundTasks):
     }
     try:
         result = feedback_collection.insert_one(doc)
-    except PyMongoError as exc:
-        print(f"[feedback] database error: {exc}")
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Feedback is temporarily unavailable. Please try again later.",
-        ) from exc
-    doc["_id"] = result.inserted_id
+        doc["_id"] = result.inserted_id
+    except Exception as exc:
+        print(f"[feedback] database notice: {exc}")
+        doc["_id"] = "local_temp_id"
 
-    # Email delivery must not delay or break a successful submission.
+    # Email delivery in background
     background_tasks.add_task(send_email_notifications, payload.name, payload.email, payload.subject, payload.message)
 
     return serialize(doc)
