@@ -107,52 +107,12 @@ export const skillsCategories = [
         projectsCount: 5,
       },
       {
-        name: "HTML5",
-        level: "Advanced",
-        icon: "SiHtml5",
-        description:
-          "Semantic markup, accessibility (a11y), modern web page structure, forms, and SEO optimization.",
-        projectsCount: 12,
-      },
-      {
-        name: "CSS3",
-        level: "Advanced",
-        icon: "SiCss3",
-        description:
-          "Modern responsive layouts, Flexbox, CSS Grid, custom keyframe animations, glassmorphism, and styling.",
-        projectsCount: 12,
-      },
-      {
         name: "JavaScript",
         level: "Advanced",
         icon: "SiJavascript",
         description:
           "Modern ES6+, async/await, closures, promises, event loop, DOM manipulation, and functional paradigms.",
         projectsCount: 12,
-      },
-      {
-        name: "C++",
-        level: "Intermediate",
-        icon: "SiCplusplus",
-        description:
-          "Object-oriented programming, Standard Template Library (STL), memory management, and high-performance DSA.",
-        projectsCount: 5,
-      },
-      {
-        name: "TypeScript",
-        level: "Intermediate",
-        icon: "SiTypescript",
-        description:
-          "Static type safety, interfaces, generics, strict typing, and robust scalable frontend architectures.",
-        projectsCount: 6,
-      },
-      {
-        name: "SQL",
-        level: "Intermediate",
-        icon: "FaDatabase",
-        description:
-          "Relational queries, schema design, complex JOINs, indexing, normalization, and data aggregations.",
-        projectsCount: 6,
       },
     ],
   },
@@ -323,61 +283,9 @@ export const skillsCategories = [
           "Custom dev setup, debugging configurations, keybindings, extensions, and integrated terminal workflows.",
         projectsCount: 20,
       },
-      {
-        name: "Postman",
-        level: "Advanced",
-        icon: "SiPostman",
-        description:
-          "API endpoint testing, collection runner, environment variables, automated tests, and mock servers.",
-        projectsCount: 8,
-      },
     ],
   },
-  {
-    name: "Core CS",
-    skills: [
-      {
-        name: "Data Structures",
-        level: "Advanced",
-        icon: "FaProjectDiagram",
-        description:
-          "Arrays, Linked Lists, Trees, Graphs, Heaps, Hash Tables, Stacks, Queues, and Tries.",
-        projectsCount: 12,
-      },
-      {
-        name: "Algorithms",
-        level: "Advanced",
-        icon: "FaBrain",
-        description:
-          "Sorting, Binary Search, Dynamic Programming, Greedy, Recursion, Backtracking, and Graph Traversals.",
-        projectsCount: 12,
-      },
-      {
-        name: "OOP",
-        level: "Advanced",
-        icon: "FaCubes",
-        description:
-          "Encapsulation, Abstraction, Inheritance, Polymorphism, SOLID principles, and clean software architecture.",
-        projectsCount: 10,
-      },
-      {
-        name: "DBMS",
-        level: "Intermediate",
-        icon: "FaDatabase",
-        description:
-          "ACID properties, transactions, entity-relationship diagrams, relational modeling, and normalization.",
-        projectsCount: 5,
-      },
-      {
-        name: "Operating Systems",
-        level: "Intermediate",
-        icon: "FaTerminal",
-        description:
-          "Process synchronization, deadlock avoidance, virtual memory management, CPU scheduling, and multi-threading.",
-        projectsCount: 4,
-      },
-    ],
-  },
+
 ];
 
 export const marqueeTech = [
