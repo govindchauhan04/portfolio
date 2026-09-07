@@ -31,11 +31,10 @@ export const profile = {
 };
 
 export const rotatingRoles = [
-  "Java Developer",
   "Full Stack Developer",
   "Problem Solver",
   "DSA Enthusiast",
-  "Software Engineer",
+  "AI/ML Enginear",
 ];
 
 export const education = [
