@@ -9,16 +9,10 @@ import Hero from './components/Hero';
 import About from './components/About';
 import Skills from './components/Skills';
 import Projects from './components/Projects';
-import CodeWindow from './components/CodeWindow';
-import LearningNotes from './components/LearningNotes';
-import CodingJourney from './components/CodingJourney';
 import Education from './components/Education';
-import LeetCodeSection from './components/LeetCodeSection';
-import GitHubActivity from './components/GitHubActivity';
 import Videos from './components/Videos';
 import Achievements from './components/Achievements';
 import ExperimentLab from './components/ExperimentLab';
-import CurrentlyExploring from './components/CurrentlyExploring';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import CommandPalette from './components/CommandPalette';
@@ -82,15 +76,10 @@ export default function App() {
           <Skills />
           <Projects />
           <CodeWindow />
-          <LearningNotes />
-          <CodingJourney />
           <Education />
-          <LeetCodeSection />
-          <GitHubActivity />
           <Videos />
           <Achievements />
           <ExperimentLab />
-          <CurrentlyExploring />
           <Contact />
         </main>
 
