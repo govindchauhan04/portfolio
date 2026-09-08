@@ -3,14 +3,11 @@ import Lenis from 'lenis';
 
 import CinematicIntro from './components/CinematicIntro';
 import CustomCursor from './components/CustomCursor';
-import ParticleBackground from './components/ParticleBackground';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import About from './components/About';
 import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Education from './components/Education';
-import Videos from './components/Videos';
 import Achievements from './components/Achievements';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
@@ -59,9 +56,6 @@ export default function App() {
       {/* Desktop Custom Cursor */}
       <CustomCursor />
 
-      {/* Particle Network Canvas Background */}
-      <ParticleBackground />
-
       {/* Main App Layout */}
       <div className={`transition-opacity duration-1000 ${introFinished ? 'opacity-100' : 'opacity-0'}`}>
         <Navbar
@@ -71,11 +65,9 @@ export default function App() {
 
         <main className="relative z-10">
           <Hero />
-          <About />
-          <Skills />
           <Projects />
+          <Skills />
           <Education />
-          <Videos />
           <Achievements />
           <Contact />
         </main>

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { profile, rotatingRoles } from '../data/PortfolioData';
-import DeveloperCard from './DeveloperCard';
-import { FaGithub, FaLinkedin, FaCode, FaFileDownload, FaArrowDown } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaFileDownload, FaArrowRight } from 'react-icons/fa';
 import { SiLeetcode } from 'react-icons/si';
 
 export default function Hero() {
   const [roleIndex, setRoleIndex] = useState(0);
   const [fadeRole, setFadeRole] = useState(true);
+  const [codeTilt, setCodeTilt] = useState({ x: 0, y: 0 });
 
   // Rotating roles loop
   useEffect(() => {
@@ -26,29 +26,28 @@ export default function Hero() {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleCodePointerMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width - 0.5) * 8;
+    const y = ((event.clientY - rect.top) / rect.height - 0.5) * -8;
+    setCodeTilt({ x, y });
+  };
+
+  const resetCodeTilt = () => setCodeTilt({ x: 0, y: 0 });
+
   return (
-    <section id="home" className="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden">
+    <section id="home" className="hero-stage relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden">
       {/* Background ambient lighting */}
       <div className="absolute top-1/4 left-10 w-96 h-96 ambient-glow-cyan pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-96 h-96 ambient-glow-violet pointer-events-none" />
 
-      <div className="w-[92%] max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center z-10">
+      <div className="hero-frame w-[92%] max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center z-10">
         {/* Left Content Column */}
         <div className="lg:col-span-7 flex flex-col items-start space-y-6">
-          {/* Status Badge */}
-          <div className="inline-flex items-center space-x-2.5 px-4 py-2 rounded-full glass-panel border border-emerald-500/30 text-emerald-400 text-xs font-mono tracking-wider shadow-[0_0_15px_rgba(16,185,129,0.15)]">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-semibold uppercase">{profile.status}</span>
-          </div>
-
           {/* Main Heading */}
           <div className="space-y-2">
-            <h2 className="text-slate-400 font-mono text-lg md:text-xl font-medium tracking-wide">
-              Hi, I'm
-            </h2>
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold font-heading tracking-tight text-slate-100 uppercase leading-[1.05]">
-              GOVIND <br />
-              <span className="text-gradient-cyan">SINGH</span>
+            <h1 className="hero-reference-title text-4xl sm:text-6xl lg:text-7xl font-extrabold font-heading tracking-tight text-slate-100 uppercase leading-[1.05]">
+              GOVIND <span className="text-gradient-cyan">SINGH</span>
             </h1>
           </div>
 
@@ -69,14 +68,19 @@ export default function Hero() {
             "{profile.tagline}"
           </p>
 
+          <div className="hero-proof font-mono" aria-label="Current development focus">
+            <span><b>STACK</b> Java · Python · React</span>
+            <span><b>STATUS</b> open to opportunities</span>
+          </div>
+
           {/* Primary CTA Buttons */}
           <div className="flex flex-wrap items-center gap-4 pt-2 w-full sm:w-auto">
             <button
               onClick={() => scrollTo('projects')}
               className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-heading font-bold text-sm tracking-wide shadow-[0_0_25px_rgba(0,229,255,0.4)] transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] cursor-pointer flex items-center space-x-2"
             >
-              <span>Explore My Work</span>
-              <FaArrowDown className="text-xs" />
+              <span>View Projects</span>
+              <FaArrowRight className="text-xs" />
             </button>
 
             <a
@@ -92,12 +96,11 @@ export default function Hero() {
 
           {/* Secondary Links: Social Icons */}
           <div className="flex items-center space-x-4 pt-4 border-t border-slate-800/80 w-full">
-            <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">CONNECT &gt;</span>
             <a
               href={profile.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 rounded-xl glass-panel text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 transition-all cursor-pointer"
+              className="hero-social p-3 rounded-xl glass-panel text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 transition-all cursor-pointer"
               title="GitHub Profile"
             >
               <FaGithub className="text-xl" />
@@ -106,7 +109,7 @@ export default function Hero() {
               href={profile.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 rounded-xl glass-panel text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 transition-all cursor-pointer"
+              className="hero-social p-3 rounded-xl glass-panel text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 transition-all cursor-pointer"
               title="LinkedIn Profile"
             >
               <FaLinkedin className="text-xl" />
@@ -115,7 +118,7 @@ export default function Hero() {
               href={profile.leetcode}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 rounded-xl glass-panel text-slate-300 hover:text-amber-400 hover:border-amber-500/50 transition-all cursor-pointer"
+              className="hero-social p-3 rounded-xl glass-panel text-slate-300 hover:text-amber-400 hover:border-amber-500/50 transition-all cursor-pointer"
               title="LeetCode Profile"
             >
               <SiLeetcode className="text-xl" />
@@ -123,9 +126,24 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right 3D ID Card Column */}
+        {/* Right code-window visual */}
         <div className="lg:col-span-5 flex justify-center lg:justify-end">
-          <DeveloperCard />
+          <div
+            className="hero-code-window glass-panel scanline-effect"
+            onPointerMove={handleCodePointerMove}
+            onPointerLeave={resetCodeTilt}
+            style={{ transform: `perspective(900px) rotateX(${codeTilt.y}deg) rotateY(${codeTilt.x}deg)` }}
+          >
+            <div className="hero-code-topbar">
+              <div className="flex items-center gap-2">
+                <span className="hero-window-dot bg-rose-400" />
+                <span className="hero-window-dot bg-amber-400" />
+                <span className="hero-window-dot bg-emerald-400" />
+              </div>
+              <span className="font-mono text-[10px] text-slate-500">ENGINEER.PY</span>
+            </div>
+            <pre className="hero-code-content font-mono"><code>{`class Engineer:\n\n  def __init__(self):\n    self.name = 'Govind Singh'\n    self.role = 'AI/ML Full Stack'\n    self.stack = [React, Node, Python]\n    self.status = LEARNING\n\n$ python engineer.py\n>>> Booting profile...\n>>> Govind Singh\n>>> Status: OPEN TO OPPORTUNITIES\n>>> Ready to build.`}</code></pre>
+          </div>
         </div>
       </div>
 

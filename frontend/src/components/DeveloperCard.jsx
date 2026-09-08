@@ -68,22 +68,23 @@ export default function DeveloperCard() {
         </div>
       </div>
 
-      {/* Developer Profile Picture & Main Titles */}
-      <div className="flex items-center space-x-4 mb-6">
-        <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-2 border-cyan-400/50 shadow-[0_0_20px_rgba(0,229,255,0.3)] shrink-0">
+      {/* Side portrait panel and identity */}
+      <div className="developer-portrait-layout mb-6">
+        <div className="developer-portrait relative rounded-2xl overflow-hidden border-2 border-cyan-400/50 shadow-[0_0_24px_rgba(0,229,255,0.28)] shrink-0">
           <img
             src={profile.avatar}
             alt={profile.name}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             onError={(e) => {
-              // Avatar fallback if offline
-              e.target.src = 'https://ui-avatars.com/api/?name=Govind+Singh&background=07090D&color=00E5FF&size=200';
+              e.currentTarget.src = '/Portfolio.png';
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#07090D] via-transparent to-transparent opacity-40" />
+          <span className="developer-portrait-label font-mono">PORTRAIT / 01</span>
         </div>
 
-        <div>
+        <div className="min-w-0">
+          <span className="text-[10px] font-mono tracking-[0.22em] text-slate-500 uppercase">Digital maker</span>
           <h2 className="text-2xl font-bold font-heading text-slate-100 tracking-tight">
             GOVIND SINGH
           </h2>
@@ -93,6 +94,10 @@ export default function DeveloperCard() {
           <p className="text-xs text-slate-400 font-mono">
             {profile.location}
           </p>
+          <div className="mt-4 flex flex-wrap gap-1.5 font-mono text-[10px] uppercase tracking-wider">
+            <span className="rounded-md border border-cyan-500/30 bg-cyan-500/10 px-2 py-1 text-cyan-300">Available</span>
+            <span className="rounded-md border border-violet-500/30 bg-violet-500/10 px-2 py-1 text-violet-300">Open to build</span>
+          </div>
         </div>
       </div>
 

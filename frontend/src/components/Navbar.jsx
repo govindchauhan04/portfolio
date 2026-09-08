@@ -10,14 +10,11 @@ export default function Navbar({ onOpenTerminal, onOpenAI }) {
 
   const navItems = [
     { id: 'home', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'skills', label: 'Skills' },
     { id: 'projects', label: 'Projects' },
-    { id: 'journey', label: 'Journey' },
+    { id: 'skills', label: 'Tech Stack' },
     { id: 'education', label: 'Education' },
-    { id: 'videos', label: 'Videos' },
-    { id: 'achievements', label: 'Achievements' },
-    { id: 'contact', label: 'Contact' }
+    { id: 'achievements', label: 'Certificates' },
+    { id: 'contact', label: 'Feedback' }
   ];
 
   // Active section observer & hide-on-scroll down

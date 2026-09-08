@@ -504,16 +504,6 @@ export const githubFallback = {
 
 export const achievements = [
   {
-    id: "leetcode-streak",
-    title: "LeetCode 200 Days Badge 2026",
-    issuer: "LeetCode",
-    date: "2026",
-    category: "BADGE",
-    image: "/Leetcode.png",
-    description:
-      "Awarded for solving problems on LeetCode on 200+ days in 2026.",
-  },
-  {
     id: "cert-hachshood",
     title: "Hackathon · HachShood · CSJMU University",
     issuer: "CSJMU University",
@@ -542,6 +532,26 @@ export const achievements = [
     image: "/Certificate_3.jpeg",
     description:
       "Achieved recognition for competitive programming excellence and AI integration challenge.",
+  },
+  {
+    id: "cert-tata-genai-analytics",
+    title: "GenAI Powered Data Analytics Job Simulation",
+    issuer: "Tata · Forge",
+    date: "September 8, 2026",
+    category: "JOB SIMULATION",
+    image: "/certificate_4.jpeg",
+    description:
+      "Completed practical data analytics tasks covering exploratory analysis, AI prediction, reporting, and data storytelling.",
+  },
+  {
+    id: "cert-british-airways-data-science",
+    title: "Data Science Job Simulation",
+    issuer: "British Airways · Forge",
+    date: "September 8, 2026",
+    category: "JOB SIMULATION",
+    image: "/certificate_5.jpeg",
+    description:
+      "Completed practical data science tasks focused on modeling lounge eligibility and predicting customer buying behaviour.",
   },
 ];
 
