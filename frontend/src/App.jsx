@@ -12,7 +12,6 @@ import Projects from './components/Projects';
 import Education from './components/Education';
 import Videos from './components/Videos';
 import Achievements from './components/Achievements';
-import ExperimentLab from './components/ExperimentLab';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import CommandPalette from './components/CommandPalette';
@@ -75,11 +74,9 @@ export default function App() {
           <About />
           <Skills />
           <Projects />
-          <CodeWindow />
           <Education />
           <Videos />
           <Achievements />
-          <ExperimentLab />
           <Contact />
         </main>
 

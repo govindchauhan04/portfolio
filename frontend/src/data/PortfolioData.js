@@ -99,14 +99,6 @@ export const skillsCategories = [
         projectsCount: 8,
       },
       {
-        name: "C",
-        level: "Intermediate",
-        icon: "SiC",
-        description:
-          "Low-level memory management, pointers, dynamic memory allocation, data structures, and systems programming.",
-        projectsCount: 5,
-      },
-      {
         name: "JavaScript",
         level: "Advanced",
         icon: "SiJavascript",
@@ -120,89 +112,12 @@ export const skillsCategories = [
     name: "Frontend",
     skills: [
       {
-        name: "React.js",
+        name: "React",
         level: "Advanced",
         icon: "SiReact",
         description:
-          "Hooks, custom hooks, state management, SPA routing, virtual DOM optimization, and reusable component architectures.",
+          "Hooks, custom hooks, state management, SPA routing, and reusable component architectures.",
         projectsCount: 10,
-      },
-      {
-        name: "Tailwind CSS",
-        level: "Advanced",
-        icon: "SiTailwindcss",
-        description:
-          "Utility-first styling, design tokens, responsive breakpoints, sleek cyber aesthetic, and custom configurations.",
-        projectsCount: 10,
-      },
-      {
-        name: "JavaScript",
-        level: "Advanced",
-        icon: "SiJavascript",
-        description:
-          "Interactive client-side web applications, DOM APIs, event listeners, AJAX/Fetch API, and modern ES6+ features.",
-        projectsCount: 12,
-      },
-      {
-        name: "HTML5",
-        level: "Advanced",
-        icon: "SiHtml5",
-        description:
-          "Semantic markup, accessibility (a11y), responsive structures, SEO optimization, and web APIs.",
-        projectsCount: 12,
-      },
-      {
-        name: "CSS3",
-        level: "Advanced",
-        icon: "SiCss3",
-        description:
-          "Flexbox, CSS Grid, custom keyframe animations, glassmorphism, transitions, and modular styling.",
-        projectsCount: 12,
-      },
-      {
-        name: "Vite",
-        level: "Advanced",
-        icon: "SiVite",
-        description:
-          "Lightning-fast ESM build tool, instant HMR, asset bundling, code splitting, and production optimizations.",
-        projectsCount: 8,
-      },
-      {
-        name: "Redux",
-        level: "Intermediate",
-        icon: "SiRedux",
-        description:
-          "Global state management, Redux Toolkit (RTK), actions, reducers, and predictable state containers.",
-        projectsCount: 4,
-      },
-    ],
-  },
-  {
-    name: "Data Science",
-    skills: [
-      {
-        name: "NumPy",
-        level: "Advanced",
-        icon: "SiNumpy",
-        description:
-          "N-dimensional arrays, vectorization, linear algebra, matrix operations, and high-performance numerical computing.",
-        projectsCount: 5,
-      },
-      {
-        name: "Pandas",
-        level: "Advanced",
-        icon: "SiPandas",
-        description:
-          "DataFrames, data cleaning, aggregation, series slicing, time-series analysis, and ETL data pipelines.",
-        projectsCount: 5,
-      },
-      {
-        name: "Python",
-        level: "Advanced",
-        icon: "SiPython",
-        description:
-          "Core programming language for data analysis, scientific computation, data visualization, and AI pipelines.",
-        projectsCount: 8,
       },
     ],
   },
@@ -235,78 +150,16 @@ export const skillsCategories = [
       },
     ],
   },
-  {
-    name: "Database",
-    skills: [
-      {
-        name: "MongoDB",
-        level: "Intermediate",
-        icon: "SiMongodb",
-        description:
-          "NoSQL document schemas, Mongoose ODM, aggregation pipelines, and MongoDB Atlas cloud hosting.",
-        projectsCount: 6,
-      },
-      {
-        name: "MySQL",
-        level: "Intermediate",
-        icon: "SiMysql",
-        description:
-          "Relational DB design, SQL normalization, indexing, JOIN query optimization, and transaction safety.",
-        projectsCount: 4,
-      },
-    ],
-  },
-  {
-    name: "Tools & DevOps",
-    skills: [
-      {
-        name: "Git",
-        level: "Advanced",
-        icon: "SiGit",
-        description:
-          "Distributed version control, branching workflows, merging, rebase, cherry-pick, and stash management.",
-        projectsCount: 15,
-      },
-      {
-        name: "GitHub",
-        level: "Advanced",
-        icon: "SiGithub",
-        description:
-          "CI/CD workflows, pull requests, issue tracking, project boards, and open-source contributions.",
-        projectsCount: 15,
-      },
-      {
-        name: "VS Code",
-        level: "Advanced",
-        icon: "SiVisualstudiocode",
-        description:
-          "Custom dev setup, debugging configurations, keybindings, extensions, and integrated terminal workflows.",
-        projectsCount: 20,
-      },
-    ],
-  },
-
 ];
 
 export const marqueeTech = [
   "JAVA",
   "PYTHON",
-  "C",
-  "HTML5",
-  "CSS3",
   "JAVASCRIPT",
-  "TAILWIND CSS",
   "REACT",
-  "NUMPY",
-  "PANDAS",
   "FASTAPI",
   "NODE.JS",
   "EXPRESS",
-  "MONGODB",
-  "MYSQL",
-  "DSA",
-  "GIT",
-  "GITHUB",
 ];
 
 export const projects = [
@@ -573,11 +426,36 @@ export const problemSolvingStats = {
     },
   ],
   recentAccepted: [
-    { name: "Roman to Integer", difficulty: "Easy", tag: "Strings / Math", lang: "Java" },
-    { name: "Integer to Roman", difficulty: "Medium", tag: "Strings / Math", lang: "Java" },
-    { name: "String Compression", difficulty: "Medium", tag: "Two Pointers", lang: "Java" },
-    { name: "Removing Min & Max from Array", difficulty: "Medium", tag: "Greedy / Array", lang: "Java" },
-    { name: "N-th Tribonacci Number", difficulty: "Easy", tag: "DP / Recursion", lang: "Java" },
+    {
+      name: "Roman to Integer",
+      difficulty: "Easy",
+      tag: "Strings / Math",
+      lang: "Java",
+    },
+    {
+      name: "Integer to Roman",
+      difficulty: "Medium",
+      tag: "Strings / Math",
+      lang: "Java",
+    },
+    {
+      name: "String Compression",
+      difficulty: "Medium",
+      tag: "Two Pointers",
+      lang: "Java",
+    },
+    {
+      name: "Removing Min & Max from Array",
+      difficulty: "Medium",
+      tag: "Greedy / Array",
+      lang: "Java",
+    },
+    {
+      name: "N-th Tribonacci Number",
+      difficulty: "Easy",
+      tag: "DP / Recursion",
+      lang: "Java",
+    },
   ],
 };
 
@@ -631,8 +509,7 @@ export const achievements = [
     issuer: "LeetCode",
     date: "2026",
     category: "BADGE",
-    image:
-      "/Leetcode.png",
+    image: "/Leetcode.png",
     description:
       "Awarded for solving problems on LeetCode on 200+ days in 2026.",
   },
@@ -707,33 +584,3 @@ export const labExperiments = [
   },
 ];
 
-export const currentlyExploring = [
-  {
-    name: "Advanced DSA & Graph Theory",
-    status: "ACTIVE PRACTICE",
-    progress: 90,
-    details:
-      "Diving deep into Segment Trees, Disjoint Set Union (DSU), and Graph Shortest-Path algorithms in Java.",
-  },
-  {
-    name: "Full Stack & React Ecosystem",
-    status: "BUILDING PROJECTS",
-    progress: 85,
-    details:
-      "Mastering state management, performance optimization, server-side rendering concepts, and custom hook design.",
-  },
-  {
-    name: "Backend Architecture & Microservices",
-    status: "EXPLORING",
-    progress: 70,
-    details:
-      "Understanding API design patterns, SQL normalization, Redis caching strategies, and Docker containerization.",
-  },
-  {
-    name: "System Design & Scalability",
-    status: "IN PROGRESS",
-    progress: 65,
-    details:
-      "Studying load balancers, rate limiting algorithms, database sharding, and fault-tolerant system designs.",
-  },
-];
